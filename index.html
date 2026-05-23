@@ -6,135 +6,227 @@
 <title>Coevaluación — Proyecto Integrado GIEIA</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f8f6;--surface:#ffffff;--border:#e0e0d8;--border2:#c8c8be;
+  --text:#1a1a18;--text2:#666660;--text3:#999990;
+  --blue:#185FA5;--blue-light:#E6F1FB;--blue-mid:#B5D4F4;--blue-dark:#0C447C;
+  --green-light:#EAF3DE;--green-dark:#27500A;
+  --red-light:#FCEBEB;--red-dark:#791F1F;--red:#A32D2D;
+  --amber-light:#FAEEDA;--amber-dark:#633806;
+  --gray:#f1efea;--radius:10px;--radius-sm:7px;
+}
+@media(prefers-color-scheme:dark){
   :root{
-    --bg:#f8f8f6;--surface:#ffffff;--border:#e0e0d8;--border2:#c8c8be;
-    --text:#1a1a18;--text2:#666660;--text3:#999990;
-    --blue:#185FA5;--blue-light:#E6F1FB;--blue-mid:#B5D4F4;--blue-dark:#0C447C;
-    --green-light:#EAF3DE;--green-dark:#27500A;
-    --red-light:#FCEBEB;--red-dark:#791F1F;--red:#A32D2D;
-    --gray:#f1efea;--radius:10px;--radius-sm:7px;
+    --bg:#1c1c1a;--surface:#2a2a28;--border:#3a3a36;--border2:#505050;
+    --text:#f0f0ec;--text2:#aaaaA0;--text3:#707068;
+    --blue:#378ADD;--blue-light:#0c2a45;--blue-mid:#1a4060;--blue-dark:#85B7EB;
+    --green-light:#173404;--green-dark:#C0DD97;
+    --red-light:#2a1010;--red-dark:#F09595;--red:#E24B4A;
+    --amber-light:#2a1f05;--amber-dark:#FAC775;
+    --gray:#252523;
   }
-  @media(prefers-color-scheme:dark){
-    :root{
-      --bg:#1c1c1a;--surface:#2a2a28;--border:#3a3a36;--border2:#505050;
-      --text:#f0f0ec;--text2:#aaaaA0;--text3:#707068;
-      --blue:#378ADD;--blue-light:#0c2a45;--blue-mid:#1a4060;--blue-dark:#85B7EB;
-      --green-light:#173404;--green-dark:#C0DD97;
-      --red-light:#2a1010;--red-dark:#F09595;--red:#E24B4A;
-      --gray:#252523;
-    }
-  }
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;color:var(--text);background:var(--bg);min-height:100vh}
-  .screen{display:none;padding:1.5rem;max-width:780px;margin:0 auto}
-  .screen.active{display:block}
-  .card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem}
-  h1{font-size:20px;font-weight:500;margin-bottom:0.25rem;color:var(--text)}
-  h2{font-size:16px;font-weight:500;margin-bottom:1rem;color:var(--text)}
-  .subtitle{font-size:13px;color:var(--text2);margin-bottom:1.5rem}
-  label{font-size:13px;color:var(--text2);display:block;margin-bottom:4px}
-  select,input[type=text],input[type=password]{
-    width:100%;padding:8px 10px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);
-    font-size:14px;background:var(--surface);color:var(--text);margin-bottom:12px;outline:none
-  }
-  select:focus,input:focus{border-color:var(--blue)}
-  button{
-    padding:8px 16px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);
-    background:var(--surface);color:var(--text);font-size:14px;cursor:pointer;transition:background 0.15s
-  }
-  button:hover{background:var(--gray)}
-  button.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
-  button.primary:hover{background:var(--blue-dark)}
-  button.danger{background:var(--red);color:#fff;border-color:var(--red)}
-  .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem}
-  .badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;background:var(--blue-light);color:var(--blue-dark)}
-  .sep{height:0.5px;background:var(--border);margin:1rem 0}
-  .rating-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--border);flex-wrap:wrap}
-  .rating-row:last-child{border-bottom:none}
-  .alumno-name{min-width:140px;font-size:14px}
-  .rating-btns{display:flex;gap:4px;flex-wrap:wrap}
-  .rbtn{
-    width:34px;height:34px;border-radius:6px;border:0.5px solid var(--border2);
-    background:var(--gray);font-size:13px;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;transition:background 0.1s;color:var(--text)
-  }
-  .rbtn:hover{background:var(--blue-mid);border-color:var(--blue)}
-  .rbtn.selected{background:var(--blue);color:#fff;border-color:var(--blue)}
-  .rbtn.np{font-size:10px;width:44px}
-  .rbtn.np.selected{background:#888780;border-color:#5F5E5A;color:#fff}
-  .item-block{margin-bottom:1.5rem}
-  .item-title{font-size:14px;font-weight:500;margin-bottom:0.75rem;color:var(--text)}
-  .msg{padding:10px 14px;border-radius:var(--radius-sm);font-size:14px;margin-bottom:1rem}
-  .msg.ok{background:var(--green-light);color:var(--green-dark)}
-  .msg.err{background:var(--red-light);color:var(--red-dark)}
-  .msg.info{background:var(--blue-light);color:var(--blue-dark)}
-  .nav-top{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem}
-  .nav-top h1{margin-bottom:0}
-  .back-btn{padding:6px 12px;font-size:13px}
-  table{width:100%;border-collapse:collapse;font-size:13px}
-  th{text-align:left;padding:8px 10px;background:var(--blue-light);color:var(--blue-dark);font-weight:500;border-bottom:0.5px solid var(--blue-mid)}
-  td{padding:8px 10px;border-bottom:0.5px solid var(--border)}
-  tr:last-child td{border-bottom:none}
-  .nota-cell{font-weight:500;color:var(--blue);text-align:center}
-  .alumno-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:0.5px solid var(--border);border-radius:20px;font-size:13px;margin:3px;background:var(--gray)}
-  .alumno-chip .rm{cursor:pointer;color:var(--text2);font-size:16px;line-height:1}
-  .alumno-chip .rm:hover{color:var(--red)}
-  .cfg-section{margin-bottom:1.5rem}
-  .cfg-section h3{font-size:14px;font-weight:500;margin-bottom:0.75rem}
-  pre{background:var(--gray);padding:1rem;border-radius:var(--radius-sm);font-size:11px;overflow-x:auto;white-space:pre-wrap;color:var(--text);border:0.5px solid var(--border)}
-  .tab-btn{padding:7px 14px;font-size:13px}
-  .tab-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-  @media(max-width:520px){.alumno-name{min-width:100%}}
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;color:var(--text);background:var(--bg);min-height:100vh}
+.screen{display:none;padding:1.5rem;max-width:780px;margin:0 auto}
+.screen.active{display:block}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem}
+h1{font-size:20px;font-weight:500;margin-bottom:0.25rem;color:var(--text)}
+h2{font-size:16px;font-weight:500;margin-bottom:1rem;color:var(--text)}
+h3{font-size:14px;font-weight:500;color:var(--text);margin-bottom:0.5rem}
+.subtitle{font-size:13px;color:var(--text2);margin-bottom:1.5rem}
+label{font-size:13px;color:var(--text2);display:block;margin-bottom:4px}
+select,input[type=text],input[type=password]{
+  width:100%;padding:8px 10px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);
+  font-size:14px;background:var(--surface);color:var(--text);margin-bottom:12px;outline:none
+}
+textarea{
+  width:100%;padding:8px 10px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);
+  font-size:13px;background:var(--surface);color:var(--text);outline:none;
+  resize:vertical;min-height:80px;line-height:1.5;font-family:inherit
+}
+textarea:focus,select:focus,input:focus{border-color:var(--blue)}
+button{
+  padding:8px 16px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);
+  background:var(--surface);color:var(--text);font-size:14px;cursor:pointer;transition:background 0.15s
+}
+button:hover{background:var(--gray)}
+button.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+button.primary:hover{background:var(--blue-dark)}
+button.danger{background:var(--red);color:#fff;border-color:var(--red)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;background:var(--blue-light);color:var(--blue-dark)}
+.sep{height:0.5px;background:var(--border);margin:1rem 0}
+.rating-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--border);flex-wrap:wrap}
+.rating-row:last-child{border-bottom:none}
+.alumno-name{min-width:160px;font-size:14px;font-weight:500}
+.rating-btns{display:flex;gap:4px;flex-wrap:wrap}
+.rbtn{
+  width:34px;height:34px;border-radius:6px;border:0.5px solid var(--border2);
+  background:var(--gray);font-size:13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background 0.1s;color:var(--text)
+}
+.rbtn:hover{background:var(--blue-mid);border-color:var(--blue)}
+.rbtn.selected{background:var(--blue);color:#fff;border-color:var(--blue)}
+.rbtn.np{font-size:10px;width:44px}
+.rbtn.np.selected{background:#888780;border-color:#5F5E5A;color:#fff}
+.item-block{margin-bottom:1rem}
+.item-title{font-size:14px;font-weight:500;margin-bottom:0.75rem;color:var(--text)}
+.msg{padding:10px 14px;border-radius:var(--radius-sm);font-size:14px;margin-bottom:1rem}
+.msg.ok{background:var(--green-light);color:var(--green-dark)}
+.msg.err{background:var(--red-light);color:var(--red-dark)}
+.msg.info{background:var(--blue-light);color:var(--blue-dark)}
+.msg.warn{background:var(--amber-light);color:var(--amber-dark)}
+.nav-top{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem}
+.nav-top h1{margin-bottom:0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 10px;background:var(--blue-light);color:var(--blue-dark);font-weight:500;border-bottom:0.5px solid var(--blue-mid)}
+td{padding:8px 10px;border-bottom:0.5px solid var(--border)}
+tr:last-child td{border-bottom:none}
+.nota-cell{font-weight:500;color:var(--blue);text-align:center}
+.alumno-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:0.5px solid var(--border);border-radius:20px;font-size:13px;margin:3px;background:var(--gray)}
+.alumno-chip .rm{cursor:pointer;color:var(--text2);font-size:16px;line-height:1}
+.alumno-chip .rm:hover{color:var(--red)}
+.tab-btn{padding:7px 14px;font-size:13px}
+.tab-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.instruccion-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.instruccion-item:last-child{border-bottom:none}
+.instruccion-num{min-width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0;margin-top:1px}
+.instruccion-texto{font-size:13px;color:var(--text2);line-height:1.6}
+.instruccion-texto strong{color:var(--text)}
+.alumno-bloque{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1rem}
+.alumno-bloque-header{font-size:14px;font-weight:500;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:0.5px solid var(--border)}
+pre{background:var(--gray);padding:1rem;border-radius:var(--radius-sm);font-size:11px;overflow-x:auto;white-space:pre-wrap;color:var(--text);border:0.5px solid var(--border)}
+@media(max-width:520px){.alumno-name{min-width:100%}}
 </style>
 </head>
 <body>
 
-<!-- INICIO -->
+<!-- ══ PANTALLA INICIO ══════════════════════════════════════════════════ -->
 <div id="s-home" class="screen active">
   <div style="padding-top:2rem">
   <div class="card">
     <h1><i class="ti ti-users" style="font-size:22px;vertical-align:-3px;margin-right:8px"></i>Coevaluación — Proyecto Integrado</h1>
-    <p class="subtitle">Selecciona tu grupo y comienza la evaluación de tus compañeros.</p>
+    <p class="subtitle">Evaluación entre pares · 3º GIEIA · Florida Universitaria</p>
     <label>Grupo</label>
-    <select id="sel-grupo"><option value="">— Selecciona tu grupo —</option></select>
+    <select id="sel-grupo"><option value="">— Cargando grupos... —</option></select>
     <label>Tu nombre</label>
     <select id="sel-self" disabled><option value="">— Selecciona primero el grupo —</option></select>
+    <div id="home-err"></div>
     <div class="btn-row">
-      <button class="primary" onclick="iniciarEval()"><i class="ti ti-arrow-right"></i> Comenzar evaluación</button>
+      <button class="primary" onclick="iniciarEval()"><i class="ti ti-arrow-right"></i> Continuar</button>
       <button onclick="goAdmin()"><i class="ti ti-settings"></i> Administración</button>
     </div>
   </div>
-  <p style="font-size:12px;color:var(--text3);text-align:center;margin-top:0.5rem">Tus respuestas quedan registradas de forma anónima para el equipo.</p>
+  <p style="font-size:12px;color:var(--text3);text-align:center;margin-top:0.5rem">Tus respuestas son confidenciales y no son visibles por tus compañeros.</p>
   </div>
 </div>
 
-<!-- EVALUACIÓN -->
+<!-- ══ INSTRUCCIONES ════════════════════════════════════════════════════ -->
+<div id="s-instrucciones" class="screen">
+  <div class="nav-top">
+    <button style="padding:6px 12px;font-size:13px" onclick="goHome()"><i class="ti ti-arrow-left"></i></button>
+    <div>
+      <h1>Antes de empezar</h1>
+      <p style="font-size:12px;color:var(--text2)" id="instr-sub"></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><i class="ti ti-info-circle" style="vertical-align:-2px;margin-right:6px"></i>Cómo rellenar la evaluación</h2>
+    <div class="instruccion-item">
+      <div class="instruccion-num">1</div>
+      <div class="instruccion-texto">
+        <strong>Valora a cada compañero del 0 al 10</strong> en cada uno de los ítems propuestos.<br>
+        0 = no cumple en absoluto · 5 = cumple parcialmente · 10 = cumple plenamente.
+      </div>
+    </div>
+    <div class="instruccion-item">
+      <div class="instruccion-num">2</div>
+      <div class="instruccion-texto">
+        <strong>Tu propia fila siempre debe marcarse como NP (No Procede).</strong><br>
+        No te autoevalúes — la app lo marca automáticamente al empezar. No lo cambies.
+      </div>
+    </div>
+    <div class="instruccion-item">
+      <div class="instruccion-num">3</div>
+      <div class="instruccion-texto">
+        <strong>Todos los ítems son obligatorios</strong> para todos tus compañeros.<br>
+        No podrás enviar la evaluación si falta alguna valoración.
+      </div>
+    </div>
+    <div class="instruccion-item">
+      <div class="instruccion-num">4</div>
+      <div class="instruccion-texto">
+        <strong>Los campos de texto son opcionales.</strong><br>
+        Úsalos para justificar valoraciones extremas, hacer sugerencias o comentar el desarrollo del proyecto.
+      </div>
+    </div>
+    <div class="instruccion-item">
+      <div class="instruccion-num">5</div>
+      <div class="instruccion-texto">
+        <strong>Solo puedes enviar una vez.</strong><br>
+        Una vez enviada la evaluación no podrás modificarla, así que revisa antes de enviar.
+      </div>
+    </div>
+  </div>
+
+  <div class="msg warn">
+    <i class="ti ti-alert-triangle" style="vertical-align:-2px;margin-right:6px"></i>
+    <strong>Importante:</strong> marca <strong>NP</strong> en tu propia fila. Si te pones una nota a ti mismo, esa valoración no se tendrá en cuenta pero sí quedará registrada.
+  </div>
+
+  <div class="btn-row" style="margin-top:0.5rem">
+    <button class="primary" onclick="mostrarFormulario()"><i class="ti ti-pencil"></i> Comenzar evaluación</button>
+    <button onclick="goHome()">Volver</button>
+  </div>
+</div>
+
+<!-- ══ FORMULARIO EVALUACIÓN ════════════════════════════════════════════ -->
 <div id="s-eval" class="screen">
   <div class="nav-top">
-    <button class="back-btn" onclick="goHome()"><i class="ti ti-arrow-left"></i></button>
+    <button style="padding:6px 12px;font-size:13px" onclick="showScreen('s-instrucciones')"><i class="ti ti-arrow-left"></i></button>
     <div>
       <h1 id="eval-title">Evaluación</h1>
       <p style="font-size:12px;color:var(--text2)" id="eval-sub"></p>
     </div>
   </div>
-  <div id="eval-content"></div>
-  <div class="btn-row" style="margin-top:1.5rem">
-    <button class="primary" onclick="enviarEval()"><i class="ti ti-check"></i> Enviar evaluación</button>
+
+  <!-- Ítems por alumno -->
+  <div id="eval-items"></div>
+
+  <!-- Textos libres por compañero -->
+  <div class="card" style="margin-top:0.5rem">
+    <h2><i class="ti ti-message" style="vertical-align:-2px;margin-right:6px"></i>Valoración cualitativa por compañero <span style="font-size:12px;font-weight:400;color:var(--text3)">(opcional)</span></h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Puedes justificar valoraciones concretas o añadir cualquier comentario sobre un compañero en particular.</p>
+    <div id="textos-companeros"></div>
+  </div>
+
+  <!-- Texto libre general -->
+  <div class="card">
+    <h2><i class="ti ti-notes" style="vertical-align:-2px;margin-right:6px"></i>Valoración general del Proyecto Integrado <span style="font-size:12px;font-weight:400;color:var(--text3)">(opcional)</span></h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:0.75rem">Propuestas, quejas, sugerencias o felicitaciones sobre el proceso de realización del proyecto en general.</p>
+    <textarea id="texto-general" placeholder="Escribe aquí tu valoración general..."></textarea>
+  </div>
+
+  <div id="eval-err"></div>
+  <div class="btn-row" style="margin-top:0.5rem;margin-bottom:2rem">
+    <button class="primary" onclick="enviarEval()"><i class="ti ti-send"></i> Enviar evaluación</button>
     <button onclick="goHome()">Cancelar</button>
   </div>
 </div>
 
-<!-- OK -->
+<!-- ══ CONFIRMACIÓN ═════════════════════════════════════════════════════ -->
 <div id="s-ok" class="screen">
   <div style="padding-top:3rem;text-align:center">
     <div style="font-size:56px;margin-bottom:1rem;color:#3B6D11"><i class="ti ti-circle-check"></i></div>
     <h2>¡Evaluación enviada!</h2>
-    <p class="subtitle">Tu evaluación ha sido registrada correctamente. Gracias.</p>
+    <p class="subtitle">Tu evaluación ha sido registrada correctamente. Gracias por tu participación.</p>
     <button class="primary" onclick="goHome()">Volver al inicio</button>
   </div>
 </div>
 
-<!-- LOGIN ADMIN -->
+<!-- ══ LOGIN ADMIN ══════════════════════════════════════════════════════ -->
 <div id="s-admin-login" class="screen">
   <div style="max-width:360px;margin:3rem auto">
   <div class="card">
@@ -150,55 +242,58 @@
   </div>
 </div>
 
-<!-- ADMIN -->
+<!-- ══ ADMIN ════════════════════════════════════════════════════════════ -->
 <div id="s-admin" class="screen">
   <div class="nav-top">
-    <button class="back-btn" onclick="goHome()"><i class="ti ti-arrow-left"></i></button>
+    <button style="padding:6px 12px;font-size:13px" onclick="goHome()"><i class="ti ti-arrow-left"></i></button>
     <h1><i class="ti ti-settings" style="font-size:20px;vertical-align:-2px;margin-right:6px"></i>Administración</h1>
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem">
     <button class="tab-btn active" id="btn-config" onclick="showTab('tab-config')">Configuración</button>
     <button class="tab-btn" id="btn-results" onclick="showTab('tab-results')">Resultados</button>
-    <button class="tab-btn" id="btn-setup" onclick="showTab('tab-setup')">Google Sheets</button>
+    <button class="tab-btn" id="btn-sheets" onclick="showTab('tab-sheets')">Google Sheets</button>
   </div>
 
+  <!-- TAB CONFIG -->
   <div id="tab-config">
     <div class="card">
-      <h2>Grupos y alumnos</h2>
-      <div class="cfg-section">
-        <h3>Añadir grupo</h3>
-        <div style="display:flex;gap:8px">
-          <input type="text" id="new-grupo" placeholder="Nombre del grupo (ej: Grupo A)" style="margin:0;flex:1" onkeydown="if(event.key==='Enter')addGrupo()">
-          <button onclick="addGrupo()"><i class="ti ti-plus"></i> Añadir</button>
-        </div>
+      <div class="msg info" style="margin-bottom:1rem">
+        <i class="ti ti-info-circle"></i> Los grupos y alumnos se cargan desde Google Sheets. Para modificarlos edita directamente la pestaña <strong>Config</strong> de tu hoja de cálculo.
       </div>
-      <div class="sep"></div>
-      <div id="grupos-list"></div>
+      <h2>Estado de la conexión</h2>
+      <div id="status-conexion"><p style="font-size:13px;color:var(--text2)">Comprobando...</p></div>
+      <div class="btn-row">
+        <button onclick="recargarGrupos()"><i class="ti ti-refresh"></i> Recargar grupos desde Sheets</button>
+      </div>
     </div>
+
     <div class="card">
       <h2>Ítems de evaluación</h2>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:0.75rem">Estos ítems se almacenan localmente. Modifícalos aquí si necesitas cambiarlos.</p>
       <div id="items-list"></div>
       <div style="margin-top:1rem;display:flex;gap:8px">
         <input type="text" id="new-item" placeholder="Nuevo ítem..." style="margin:0;flex:1" onkeydown="if(event.key==='Enter')addItem()">
         <button onclick="addItem()"><i class="ti ti-plus"></i> Añadir</button>
       </div>
     </div>
+
     <div class="card">
       <h2>Contraseña de administración</h2>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:0.75rem">Contraseña actual: protegida. Cámbiala aquí si lo necesitas.</p>
       <div style="display:flex;gap:8px">
         <input type="password" id="new-pw" placeholder="Nueva contraseña" style="margin:0;flex:1">
         <button onclick="cambiarPw()">Cambiar</button>
       </div>
       <div id="pw-msg"></div>
     </div>
+
     <div class="card">
       <h2 style="color:var(--red)">Zona peligrosa — nuevo curso</h2>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Borra todas las respuestas del curso actual. Los grupos, alumnos e ítems se mantienen. Usa esto al inicio de cada curso.</p>
-      <button class="danger" onclick="borrarRespuestas()"><i class="ti ti-trash"></i> Borrar todas las respuestas</button>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Borra todas las respuestas guardadas localmente. Los datos en Google Sheets no se borran.</p>
+      <button class="danger" onclick="borrarRespuestas()"><i class="ti ti-trash"></i> Borrar respuestas locales</button>
     </div>
   </div>
 
+  <!-- TAB RESULTADOS -->
   <div id="tab-results" style="display:none">
     <div class="card">
       <h2>Resultados por grupo</h2>
@@ -211,13 +306,21 @@
         <button onclick="exportCSV()"><i class="ti ti-download"></i> Exportar CSV (Excel)</button>
       </div>
     </div>
+    <div class="card">
+      <h2>Comentarios cualitativos</h2>
+      <label>Grupo</label>
+      <select id="sel-grupo-comments" onchange="renderComments()">
+        <option value="">— Selecciona un grupo —</option>
+      </select>
+      <div id="comments-content"></div>
+    </div>
   </div>
 
-  <div id="tab-setup" style="display:none">
+  <!-- TAB GOOGLE SHEETS -->
+  <div id="tab-sheets" style="display:none">
     <div class="card">
-      <h2>Integración con Google Sheets (opcional)</h2>
-      <div class="msg info"><i class="ti ti-info-circle"></i> Sin configurar esto, los datos se guardan en este navegador. Con la integración, cada respuesta se envía también a tu Google Sheet.</div>
-      <br>
+      <h2>URL del Apps Script</h2>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:0.75rem">Esta URL conecta la app con tu Google Sheet. Cámbiala cada curso si creas una nueva hoja.</p>
       <label>URL del Apps Script desplegado</label>
       <input type="text" id="webhook-url" placeholder="https://script.google.com/macros/s/...">
       <div class="btn-row">
@@ -226,70 +329,47 @@
       </div>
       <div id="webhook-msg"></div>
       <div class="sep"></div>
-      <h3 style="font-size:14px;font-weight:500;margin-bottom:0.75rem">Instrucciones</h3>
+      <h3 style="margin-bottom:0.5rem">Uso cada curso nuevo</h3>
       <ol style="font-size:13px;color:var(--text2);line-height:2.2;padding-left:1.25rem">
-        <li>Ve a <strong>Google Sheets</strong> → crea una hoja nueva para este curso.</li>
-        <li>Abre <strong>Extensiones → Apps Script</strong>.</li>
-        <li>Borra el código existente y pega el código de abajo.</li>
-        <li>Clic en <strong>Implementar → Nueva implementación → Aplicación web</strong>.</li>
-        <li>En "Quién tiene acceso" elige <strong>Cualquier usuario</strong>.</li>
-        <li>Copia la URL resultante y pégala arriba.</li>
+        <li>Crea una nueva Google Sheet para el curso.</li>
+        <li>Copia el Apps Script de la hoja anterior y vuélvelo a desplegar.</li>
+        <li>Edita la pestaña <strong>Config</strong> con los nuevos equipos y alumnos.</li>
+        <li>Pega la nueva URL aquí y guarda.</li>
+        <li>Haz clic en <strong>Recargar grupos</strong> en la pestaña Configuración.</li>
       </ol>
-      <div class="sep"></div>
-      <h3 style="font-size:14px;font-weight:500;margin-bottom:0.75rem">Código para Apps Script</h3>
-      <pre id="apps-script-code"></pre>
-      <button onclick="copyScript()" style="margin-top:8px"><i class="ti ti-copy"></i> Copiar código</button>
     </div>
   </div>
 </div>
 
 <script>
-const ITEMS_DEFAULT = [
-  "Realiza las tareas asignadas dentro de los plazos",
-  "Participa activamente en los espacios de encuentro del equipo, compartiendo información y conocimientos",
-  "Colabora en la definición, organización y distribución de tareas del grupo",
-  "Tiene en cuenta los puntos de vista de los demás y retroalimenta de forma constructiva",
-  "Contribuye a mantener un buen clima de trabajo en el equipo"
+var WEBHOOK_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbye_h3cy9sRsFiK102CIJr9DxeNihxUuHjqN3IMaizCE8KPzZ_lpgAIEhcDzFuWLUIW/exec';
+
+var ITEMS_DEFAULT = [
+  'Realiza las tareas asignadas dentro de los plazos',
+  'Participa activamente en los espacios de encuentro del equipo, compartiendo información y conocimientos',
+  'Colabora en la definición, organización y distribución de tareas del grupo',
+  'Tiene en cuenta los puntos de vista de los demás y retroalimenta de forma constructiva',
+  'Contribuye a mantener un buen clima de trabajo en el equipo'
 ];
-
-const APPS_SCRIPT = `function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var data = JSON.parse(e.postData.contents);
-  if (data.test) {
-    return ContentService.createTextOutput(JSON.stringify({ok:true}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['Timestamp','Evaluador','Grupo','Evaluado','Item','Puntuacion']);
-  }
-  var ts = new Date().toISOString();
-  data.rows.forEach(function(r) {
-    sheet.appendRow([ts, data.evaluador, data.grupo, r.evaluado, r.item, r.puntuacion]);
-  });
-  return ContentService.createTextOutput(JSON.stringify({ok:true}))
-    .setMimeType(ContentService.MimeType.JSON);
-}`;
-
-document.getElementById('apps-script-code').textContent = APPS_SCRIPT;
 
 function ls(k,d){try{var v=localStorage.getItem(k);return v!==null?JSON.parse(v):d;}catch(e){return d;}}
 function lss(k,v){localStorage.setItem(k,JSON.stringify(v));}
 
-var grupos = ls('coe_grupos',[]);
-var items = ls('coe_items', ITEMS_DEFAULT);
-var respuestas = ls('coe_respuestas',[]);
-var adminPw = ls('coe_pw','admin123');
-var webhookUrl = ls('coe_webhook','');
+var grupos     = ls('coe_grupos', []);
+var items      = ls('coe_items', ITEMS_DEFAULT);
+var respuestas = ls('coe_respuestas', []);
+var adminPw    = ls('coe_pw', 'admin123');
+var webhookUrl = ls('coe_webhook', WEBHOOK_URL_DEFAULT);
 var currentGrupo = null;
-var currentSelf = null;
-var ratings = {};
+var currentSelf  = null;
+var ratings      = {};
 
 function save(){
-  lss('coe_grupos',grupos);
-  lss('coe_items',items);
-  lss('coe_respuestas',respuestas);
-  lss('coe_pw',adminPw);
-  lss('coe_webhook',webhookUrl);
+  lss('coe_grupos', grupos);
+  lss('coe_items', items);
+  lss('coe_respuestas', respuestas);
+  lss('coe_pw', adminPw);
+  lss('coe_webhook', webhookUrl);
 }
 
 function showScreen(id){
@@ -297,302 +377,419 @@ function showScreen(id){
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
-
-function goHome(){renderHome();showScreen('s-home');}
+function goHome(){cargarGruposEnHome();showScreen('s-home');}
 function goAdmin(){showScreen('s-admin-login');}
 
-function renderHome(){
-  var sg=document.getElementById('sel-grupo');
-  sg.innerHTML='<option value="">— Selecciona tu grupo —</option>';
-  grupos.forEach(function(g){sg.innerHTML+='<option value="'+g.id+'">'+g.nombre+'</option>';});
-  var ss=document.getElementById('sel-self');
-  ss.innerHTML='<option value="">— Selecciona primero el grupo —</option>';
-  ss.disabled=true;
+// ── Carga grupos desde Google Sheets ─────────────────────────────────────
+function cargarGruposDesdeSheets(callback){
+  var url = webhookUrl || WEBHOOK_URL_DEFAULT;
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(data.ok && data.grupos){
+        grupos = data.grupos;
+        save();
+        if(callback) callback(true);
+      } else {
+        if(callback) callback(false);
+      }
+    })
+    .catch(function(){
+      if(callback) callback(false);
+    });
 }
 
-document.getElementById('sel-grupo').addEventListener('change',function(){
-  var gid=this.value;
-  var ss=document.getElementById('sel-self');
+function cargarGruposEnHome(){
+  var sg = document.getElementById('sel-grupo');
+  sg.innerHTML = '<option value="">— Cargando... —</option>';
+  cargarGruposDesdeSheets(function(ok){
+    sg.innerHTML = '<option value="">— Selecciona tu grupo —</option>';
+    if(grupos.length){
+      grupos.forEach(function(g){
+        sg.innerHTML += '<option value="'+g.id+'">'+escHtml(g.nombre)+'</option>';
+      });
+    }
+    if(!ok){
+      document.getElementById('home-err').innerHTML = '<div class="msg warn" style="margin-top:8px"><i class="ti ti-wifi-off"></i> No se pudo conectar con el servidor. Usando datos guardados.</div>';
+      setTimeout(function(){document.getElementById('home-err').innerHTML='';},4000);
+    }
+    var ss = document.getElementById('sel-self');
+    ss.innerHTML = '<option value="">— Selecciona primero el grupo —</option>';
+    ss.disabled = true;
+  });
+}
+
+document.getElementById('sel-grupo').addEventListener('change', function(){
+  var gid = this.value;
+  var ss = document.getElementById('sel-self');
   if(!gid){ss.innerHTML='<option value="">— Selecciona primero el grupo —</option>';ss.disabled=true;return;}
-  var g=grupos.find(function(x){return x.id===gid;});
-  ss.innerHTML='<option value="">— Tu nombre —</option>';
-  if(g) g.alumnos.forEach(function(a){ss.innerHTML+='<option value="'+a+'">'+a+'</option>';});
-  ss.disabled=false;
+  var g = grupos.find(function(x){return x.id===gid;});
+  ss.innerHTML = '<option value="">— Tu nombre —</option>';
+  if(g) g.alumnos.forEach(function(a){ss.innerHTML+='<option value="'+a+'">'+escHtml(a)+'</option>';});
+  ss.disabled = false;
 });
 
 function iniciarEval(){
-  var gid=document.getElementById('sel-grupo').value;
-  var self=document.getElementById('sel-self').value;
+  var gid  = document.getElementById('sel-grupo').value;
+  var self = document.getElementById('sel-self').value;
   if(!gid||!self){alert('Selecciona tu grupo y tu nombre.');return;}
-  currentGrupo=grupos.find(function(x){return x.id===gid;});
-  currentSelf=self;
+  currentGrupo = grupos.find(function(x){return x.id===gid;});
+  currentSelf  = self;
   if(yaEvaluo(gid,self)){alert('Ya has enviado tu evaluación. Gracias.');return;}
-  ratings={};
-  renderEval();
-  showScreen('s-eval');
+  ratings = {};
+  document.getElementById('instr-sub').textContent = currentGrupo.nombre + ' · ' + self;
+  showScreen('s-instrucciones');
 }
 
 function yaEvaluo(gid,self){
   return respuestas.some(function(r){return r.grupo===gid&&r.evaluador===self;});
 }
 
-function renderEval(){
-  document.getElementById('eval-title').textContent='Evaluación — '+currentGrupo.nombre;
-  document.getElementById('eval-sub').textContent='Valora del 0 al 10. Usa "NP" (No Procede) en tu propia fila.';
-  var html='';
-  items.forEach(function(item,ii){
-    html+='<div class="card item-block"><div class="item-title"><span class="badge">Ítem '+(ii+1)+'</span> <span style="margin-left:8px">'+escHtml(item)+'</span></div>';
-    currentGrupo.alumnos.forEach(function(alumno){
-      var isMe=alumno===currentSelf;
-      var key='rb-'+ii+'-'+alumno.replace(/\s/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
-      html+='<div class="rating-row"><div class="alumno-name">'+escHtml(alumno)+(isMe?' <span style="font-size:11px;color:var(--text3)">(tú)</span>':'')+'</div>';
-      html+='<div class="rating-btns" id="'+key+'">';
-      html+='<div class="rbtn np'+(isMe?' selected':'')+'" onclick="setRating('+ii+',\''+escJs(alumno)+'\',\'NP\')" title="No Procede">NP</div>';
-      for(var n=0;n<=10;n++){
-        html+='<div class="rbtn'+(isMe?' disabled':'')+'"'+(isMe?' style="opacity:0.3;pointer-events:none"':' onclick="setRating('+ii+',\''+escJs(alumno)+'\','+n+')"')+'>'+n+'</div>';
-      }
-      html+='</div></div>';
-    });
-    html+='</div>';
-  });
-  document.getElementById('eval-content').innerHTML=html;
-  items.forEach(function(item,ii){setRating(ii,currentSelf,'NP');});
+function mostrarFormulario(){
+  renderEval();
+  showScreen('s-eval');
 }
 
-function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function escJs(s){return String(s).replace(/'/g,"\\'");}
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escJs(s){
+  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+}
 
-function setRating(ii,alumno,val){
-  if(!ratings[ii]) ratings[ii]={};
-  ratings[ii][alumno]=val;
-  var key='rb-'+ii+'-'+alumno.replace(/\s/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
-  var container=document.getElementById(key);
+function renderEval(){
+  document.getElementById('eval-title').textContent = 'Evaluación — ' + currentGrupo.nombre;
+  document.getElementById('eval-sub').textContent   = 'Evaluado por: ' + currentSelf;
+
+  // Ítems por alumno
+  var html = '';
+  items.forEach(function(item, ii){
+    html += '<div class="card item-block">';
+    html += '<div class="item-title"><span class="badge">Ítem '+(ii+1)+'</span> <span style="margin-left:8px">'+escHtml(item)+'</span></div>';
+    currentGrupo.alumnos.forEach(function(alumno){
+      var isMe = alumno === currentSelf;
+      var key  = 'rb-'+ii+'-'+alumno.replace(/[^a-zA-Z0-9]/g,'_');
+      html += '<div class="rating-row">';
+      html += '<div class="alumno-name">'+escHtml(alumno)+(isMe?' <span style="font-size:11px;font-weight:400;color:var(--text3)">(tú)</span>':'')+'</div>';
+      html += '<div class="rating-btns" id="'+key+'">';
+      html += '<div class="rbtn np'+(isMe?' selected':'')+'" onclick="setRating('+ii+',\''+escJs(alumno)+'\',\'NP\')" title="No Procede">NP</div>';
+      for(var n=0;n<=10;n++){
+        html += '<div class="rbtn'+(isMe?' disabled':'')+'"'
+          +(isMe?' style="opacity:0.3;pointer-events:none"':' onclick="setRating('+ii+',\''+escJs(alumno)+'\','+n+')"')
+          +'>'+n+'</div>';
+      }
+      html += '</div></div>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('eval-items').innerHTML = html;
+
+  // Aplicar NP automático a uno mismo
+  items.forEach(function(item, ii){ setRating(ii, currentSelf, 'NP'); });
+
+  // Campos de texto por compañero (excluye al propio alumno)
+  var htmlT = '';
+  currentGrupo.alumnos.forEach(function(alumno){
+    if(alumno === currentSelf) return;
+    var tid = 'txt-comp-'+alumno.replace(/[^a-zA-Z0-9]/g,'_');
+    htmlT += '<div style="margin-bottom:1rem">';
+    htmlT += '<label style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;display:block">'+escHtml(alumno)+'</label>';
+    htmlT += '<textarea id="'+tid+'" placeholder="Comentario opcional sobre '+escHtml(alumno)+'..."></textarea>';
+    htmlT += '</div>';
+  });
+  document.getElementById('textos-companeros').innerHTML = htmlT;
+  document.getElementById('texto-general').value = '';
+  document.getElementById('eval-err').innerHTML = '';
+}
+
+function setRating(ii, alumno, val){
+  if(!ratings[ii]) ratings[ii] = {};
+  ratings[ii][alumno] = val;
+  var key = 'rb-'+ii+'-'+alumno.replace(/[^a-zA-Z0-9]/g,'_');
+  var container = document.getElementById(key);
   if(!container) return;
   container.querySelectorAll('.rbtn').forEach(function(b){
-    var bval=b.classList.contains('np')?'NP':parseInt(b.textContent);
+    var bval = b.classList.contains('np') ? 'NP' : parseInt(b.textContent);
     b.classList.toggle('selected', String(bval)===String(val) || (val==='NP'&&b.classList.contains('np')));
   });
 }
 
 function enviarEval(){
-  var missing=[];
+  // Validar que todos los ítems están rellenados
+  var missing = [];
   items.forEach(function(item,ii){
     currentGrupo.alumnos.forEach(function(alumno){
       if(!ratings[ii]||ratings[ii][alumno]===undefined) missing.push('Ítem '+(ii+1)+' — '+alumno);
     });
   });
-  if(missing.length){alert('Faltan valoraciones:\n'+missing.slice(0,5).join('\n')+(missing.length>5?'\n...':'')); return;}
-  var rows=[];
+  if(missing.length){
+    document.getElementById('eval-err').innerHTML = '<div class="msg err"><i class="ti ti-alert-circle"></i> Faltan valoraciones:<br>'+missing.slice(0,5).map(escHtml).join('<br>')+(missing.length>5?'<br>...':'')+'</div>';
+    window.scrollTo(0,document.body.scrollHeight);
+    return;
+  }
+
+  // Recoger datos numéricos
+  var rows = [];
   items.forEach(function(item,ii){
     currentGrupo.alumnos.forEach(function(alumno){
       rows.push({evaluado:alumno, item:item, puntuacion:ratings[ii][alumno]});
     });
   });
-  var entrada={
-    id:Date.now(), evaluador:currentSelf, grupo:currentGrupo.id,
-    grupoNombre:currentGrupo.nombre, ts:new Date().toISOString(), rows:rows
+
+  // Recoger textos por compañero
+  var textosCompaneros = {};
+  currentGrupo.alumnos.forEach(function(alumno){
+    if(alumno === currentSelf) return;
+    var tid = 'txt-comp-'+alumno.replace(/[^a-zA-Z0-9]/g,'_');
+    var el  = document.getElementById(tid);
+    if(el && el.value.trim()) textosCompaneros[alumno] = el.value.trim();
+  });
+
+  var textoGeneral = document.getElementById('texto-general').value.trim();
+
+  var entrada = {
+    id: Date.now(),
+    evaluador: currentSelf,
+    grupo: currentGrupo.id,
+    grupoNombre: currentGrupo.nombre,
+    ts: new Date().toISOString(),
+    rows: rows,
+    textosCompaneros: textosCompaneros,
+    textoGeneral: textoGeneral
   };
+
   respuestas.push(entrada);
   save();
-  if(webhookUrl){
-    fetch(webhookUrl,{method:'POST',body:JSON.stringify({evaluador:currentSelf,grupo:currentGrupo.nombre,rows:rows})}).catch(function(){});
-  }
-  ratings={};
+
+  // Enviar a Google Sheets
+  var payload = {
+    evaluador: currentSelf,
+    grupo: currentGrupo.nombre,
+    rows: rows,
+    textosCompaneros: textosCompaneros,
+    textoGeneral: textoGeneral
+  };
+  var url = webhookUrl || WEBHOOK_URL_DEFAULT;
+  fetch(url, {method:'POST', body:JSON.stringify(payload)}).catch(function(){});
+
+  ratings = {};
   showScreen('s-ok');
 }
 
+// ── ADMIN ─────────────────────────────────────────────────────────────────
 function loginAdmin(){
-  var pw=document.getElementById('admin-pw').value;
-  if(pw===adminPw){
-    document.getElementById('admin-pw').value='';
-    document.getElementById('login-err').innerHTML='';
+  var pw = document.getElementById('admin-pw').value;
+  if(pw === adminPw){
+    document.getElementById('admin-pw').value = '';
+    document.getElementById('login-err').innerHTML = '';
     renderAdmin();
     showScreen('s-admin');
   } else {
-    document.getElementById('login-err').innerHTML='<div class="msg err">Contraseña incorrecta.</div>';
+    document.getElementById('login-err').innerHTML = '<div class="msg err">Contraseña incorrecta.</div>';
   }
 }
 
 function renderAdmin(){
-  renderGruposList();
   renderItemsList();
-  var sg=document.getElementById('sel-grupo-results');
-  sg.innerHTML='<option value="">— Selecciona un grupo —</option>';
-  grupos.forEach(function(g){sg.innerHTML+='<option value="'+g.id+'">'+g.nombre+'</option>';});
-  document.getElementById('webhook-url').value=webhookUrl||'';
+  var sg = document.getElementById('sel-grupo-results');
+  var sc = document.getElementById('sel-grupo-comments');
+  [sg, sc].forEach(function(el){
+    el.innerHTML = '<option value="">— Selecciona un grupo —</option>';
+    grupos.forEach(function(g){el.innerHTML+='<option value="'+g.id+'">'+escHtml(g.nombre)+'</option>';});
+  });
+  document.getElementById('webhook-url').value = webhookUrl || '';
   showTab('tab-config');
+  comprobarConexion();
 }
 
 function showTab(tab){
-  ['tab-config','tab-results','tab-setup'].forEach(function(t){
-    document.getElementById(t).style.display=t===tab?'block':'none';
+  ['tab-config','tab-results','tab-sheets'].forEach(function(t){
+    document.getElementById(t).style.display = t===tab?'block':'none';
   });
-  ['btn-config','btn-results','btn-setup'].forEach(function(b){
-    document.getElementById(b).className='tab-btn'+(b==='btn-'+tab.replace('tab-','')?' active':'');
+  ['btn-config','btn-results','btn-sheets'].forEach(function(b){
+    var t = b.replace('btn-','tab-');
+    document.getElementById(b).className = 'tab-btn'+(t===tab?' active':'');
   });
   if(tab==='tab-results') renderResults();
 }
 
-function renderGruposList(){
-  var el=document.getElementById('grupos-list');
-  if(!grupos.length){el.innerHTML='<p style="font-size:13px;color:var(--text2)">No hay grupos. Añade el primero arriba.</p>';return;}
-  var html='';
-  grupos.forEach(function(g,gi){
-    html+='<div style="margin-bottom:1.25rem"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
-    html+='<strong style="font-size:14px">'+escHtml(g.nombre)+'</strong>';
-    html+='<button class="danger" style="padding:4px 10px;font-size:12px" onclick="delGrupo('+gi+')"><i class="ti ti-trash"></i> Borrar grupo</button></div>';
-    html+='<div id="chips-'+gi+'">';
-    g.alumnos.forEach(function(a,ai){
-      html+='<span class="alumno-chip">'+escHtml(a)+'<span class="rm" onclick="delAlumno('+gi+','+ai+')">×</span></span>';
+function comprobarConexion(){
+  var el = document.getElementById('status-conexion');
+  el.innerHTML = '<p style="font-size:13px;color:var(--text2)">Comprobando conexión con Google Sheets...</p>';
+  var url = webhookUrl || WEBHOOK_URL_DEFAULT;
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(data.ok){
+        el.innerHTML = '<div class="msg ok"><i class="ti ti-check"></i> Conectado · '+data.grupos.length+' grupos cargados desde Sheets.</div>';
+      } else {
+        el.innerHTML = '<div class="msg err"><i class="ti ti-x"></i> Respuesta inesperada del servidor.</div>';
+      }
+    })
+    .catch(function(){
+      el.innerHTML = '<div class="msg err"><i class="ti ti-wifi-off"></i> Sin conexión con Google Sheets. Revisa la URL en la pestaña Google Sheets.</div>';
     });
-    html+='</div><div style="display:flex;gap:8px;margin-top:8px">';
-    html+='<input type="text" id="new-al-'+gi+'" placeholder="Nombre del alumno" style="margin:0;flex:1;font-size:13px;padding:6px 8px" onkeydown="if(event.key===\'Enter\')addAlumno('+gi+')">';
-    html+='<button onclick="addAlumno('+gi+')" style="padding:6px 10px;font-size:13px"><i class="ti ti-plus"></i></button>';
-    html+='</div></div><div class="sep"></div>';
+}
+
+function recargarGrupos(){
+  var el = document.getElementById('status-conexion');
+  el.innerHTML = '<p style="font-size:13px;color:var(--text2)">Recargando...</p>';
+  cargarGruposDesdeSheets(function(ok){
+    if(ok){
+      el.innerHTML = '<div class="msg ok"><i class="ti ti-check"></i> Grupos recargados correctamente · '+grupos.length+' grupos.</div>';
+      var sg = document.getElementById('sel-grupo-results');
+      var sc = document.getElementById('sel-grupo-comments');
+      [sg,sc].forEach(function(s){
+        s.innerHTML='<option value="">— Selecciona un grupo —</option>';
+        grupos.forEach(function(g){s.innerHTML+='<option value="'+g.id+'">'+escHtml(g.nombre)+'</option>';});
+      });
+    } else {
+      el.innerHTML = '<div class="msg err"><i class="ti ti-x"></i> No se pudo conectar con Google Sheets.</div>';
+    }
   });
-  el.innerHTML=html;
-}
-
-function addGrupo(){
-  var v=document.getElementById('new-grupo').value.trim();
-  if(!v)return;
-  grupos.push({id:'g'+Date.now(),nombre:v,alumnos:[]});
-  document.getElementById('new-grupo').value='';
-  save();renderGruposList();
-  var sg=document.getElementById('sel-grupo-results');
-  sg.innerHTML='<option value="">— Selecciona un grupo —</option>';
-  grupos.forEach(function(g){sg.innerHTML+='<option value="'+g.id+'">'+g.nombre+'</option>';});
-}
-
-function delGrupo(gi){
-  if(!confirm('¿Borrar el grupo "'+grupos[gi].nombre+'" y todos sus alumnos?'))return;
-  grupos.splice(gi,1);save();renderGruposList();
-}
-
-function addAlumno(gi){
-  var inp=document.getElementById('new-al-'+gi);
-  var v=inp.value.trim();
-  if(!v)return;
-  grupos[gi].alumnos.push(v);
-  inp.value='';
-  save();renderGruposList();
-}
-
-function delAlumno(gi,ai){
-  grupos[gi].alumnos.splice(ai,1);save();renderGruposList();
 }
 
 function renderItemsList(){
-  var el=document.getElementById('items-list');
-  var html='';
+  var el = document.getElementById('items-list');
+  var html = '';
   items.forEach(function(item,ii){
-    html+='<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--border)">';
-    html+='<span style="font-size:12px;color:var(--text3);min-width:20px">'+(ii+1)+'</span>';
-    html+='<span style="flex:1;font-size:13px">'+escHtml(item)+'</span>';
-    html+='<button onclick="delItem('+ii+')" style="padding:4px 8px;font-size:12px"><i class="ti ti-trash"></i></button></div>';
+    html += '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--border)">';
+    html += '<span style="font-size:12px;color:var(--text3);min-width:20px">'+(ii+1)+'</span>';
+    html += '<span style="flex:1;font-size:13px">'+escHtml(item)+'</span>';
+    html += '<button onclick="delItem('+ii+')" style="padding:4px 8px;font-size:12px"><i class="ti ti-trash"></i></button></div>';
   });
-  el.innerHTML=html||'<p style="font-size:13px;color:var(--text2)">No hay ítems.</p>';
+  el.innerHTML = html||'<p style="font-size:13px;color:var(--text2)">No hay ítems.</p>';
 }
 
 function addItem(){
-  var v=document.getElementById('new-item').value.trim();
-  if(!v)return;
-  items.push(v);document.getElementById('new-item').value='';
-  save();renderItemsList();
+  var v = document.getElementById('new-item').value.trim();
+  if(!v) return;
+  items.push(v);
+  document.getElementById('new-item').value='';
+  save(); renderItemsList();
 }
 
 function delItem(ii){
-  if(!confirm('¿Borrar este ítem?'))return;
-  items.splice(ii,1);save();renderItemsList();
+  if(!confirm('¿Borrar este ítem?')) return;
+  items.splice(ii,1); save(); renderItemsList();
 }
 
 function cambiarPw(){
-  var v=document.getElementById('new-pw').value.trim();
-  if(!v)return;
-  adminPw=v;save();
-  document.getElementById('new-pw').value='';
-  document.getElementById('pw-msg').innerHTML='<div class="msg ok" style="margin-top:8px">Contraseña actualizada.</div>';
-  setTimeout(function(){document.getElementById('pw-msg').innerHTML='';},2500);
+  var v = document.getElementById('new-pw').value.trim();
+  if(!v) return;
+  adminPw = v; save();
+  document.getElementById('new-pw').value = '';
+  document.getElementById('pw-msg').innerHTML = '<div class="msg ok" style="margin-top:8px">Contraseña actualizada.</div>';
+  setTimeout(function(){document.getElementById('pw-msg').innerHTML='';}, 2500);
 }
 
 function borrarRespuestas(){
-  if(!confirm('¿Borrar TODAS las respuestas del curso actual? Esta acción no se puede deshacer.'))return;
-  respuestas=[];save();
-  document.getElementById('results-content').innerHTML='<p style="font-size:13px;color:var(--text2);margin-top:1rem">Sin respuestas.</p>';
-  alert('Respuestas borradas correctamente.');
+  if(!confirm('¿Borrar todas las respuestas locales? Los datos en Google Sheets no se borran.')) return;
+  respuestas = []; save();
+  alert('Respuestas locales borradas.');
 }
 
+// ── RESULTADOS ────────────────────────────────────────────────────────────
 function renderResults(){
-  var gid=document.getElementById('sel-grupo-results').value;
+  var gid = document.getElementById('sel-grupo-results').value;
   if(!gid){document.getElementById('results-content').innerHTML='';return;}
-  var g=grupos.find(function(x){return x.id===gid;});
-  var resps=respuestas.filter(function(r){return r.grupo===gid;});
-  var el=document.getElementById('results-content');
-  if(!resps.length){el.innerHTML='<p style="font-size:13px;color:var(--text2);margin-top:1rem">Sin respuestas para este grupo aún.</p>';return;}
-  var evaluadores=resps.map(function(r){return r.evaluador;});
-  var html='<p style="font-size:13px;color:var(--text2);margin:1rem 0">'+evaluadores.length+' evaluación(es) recibida(s): '+evaluadores.join(', ')+'</p>';
-  var alumnos=g?g.alumnos:[];
+  var g     = grupos.find(function(x){return x.id===gid;});
+  var resps = respuestas.filter(function(r){return r.grupo===gid;});
+  var el    = document.getElementById('results-content');
+  if(!resps.length){
+    el.innerHTML='<p style="font-size:13px;color:var(--text2);margin-top:1rem">Sin respuestas para este grupo aún.</p>';
+    return;
+  }
+  var evaluadores = resps.map(function(r){return r.evaluador;});
+  var html = '<p style="font-size:13px;color:var(--text2);margin:1rem 0">'+evaluadores.length+' evaluación(es): '+evaluadores.join(', ')+'</p>';
+  var alumnos = g ? g.alumnos : [];
   alumnos.forEach(function(alumno){
-    html+='<div style="margin-bottom:1.5rem"><strong style="font-size:14px">'+escHtml(alumno)+'</strong>';
-    html+='<table style="margin-top:0.5rem"><thead><tr><th>Ítem</th><th style="text-align:center;width:80px">Media</th></tr></thead><tbody>';
-    var totalSum=0,totalCnt=0;
+    html += '<div style="margin-bottom:1.5rem"><strong style="font-size:14px">'+escHtml(alumno)+'</strong>';
+    html += '<table style="margin-top:0.5rem"><thead><tr><th>Ítem</th><th style="text-align:center;width:80px">Media</th></tr></thead><tbody>';
+    var totalSum=0, totalCnt=0;
     items.forEach(function(item,ii){
-      var vals=[];
+      var vals = [];
       resps.forEach(function(r){
-        var row=r.rows.find(function(x){return x.evaluado===alumno&&x.item===item;});
+        var row = r.rows.find(function(x){return x.evaluado===alumno&&x.item===item;});
         if(row&&row.puntuacion!=='NP'&&row.puntuacion!==null) vals.push(Number(row.puntuacion));
       });
-      var media=vals.length?vals.reduce(function(a,b){return a+b;},0)/vals.length:null;
+      var media = vals.length ? vals.reduce(function(a,b){return a+b;},0)/vals.length : null;
       if(media!==null){totalSum+=media;totalCnt++;}
-      html+='<tr><td style="font-size:12px">'+escHtml(item)+'</td><td class="nota-cell">'+(media!==null?media.toFixed(2):'—')+'</td></tr>';
+      html += '<tr><td style="font-size:12px">'+escHtml(item)+'</td><td class="nota-cell">'+(media!==null?media.toFixed(2):'—')+'</td></tr>';
     });
-    var notaFinal=totalCnt?totalSum/totalCnt:null;
-    html+='</tbody><tfoot><tr style="background:var(--gray)"><td style="font-weight:500;font-size:13px">Nota final</td><td class="nota-cell" style="font-size:16px">'+(notaFinal!==null?notaFinal.toFixed(2):'—')+'</td></tr></tfoot></table></div>';
+    var notaFinal = totalCnt ? totalSum/totalCnt : null;
+    html += '</tbody><tfoot><tr style="background:var(--gray)"><td style="font-weight:500;font-size:13px">Nota final</td><td class="nota-cell" style="font-size:16px">'+(notaFinal!==null?notaFinal.toFixed(2):'—')+'</td></tr></tfoot></table></div>';
   });
-  el.innerHTML='<div class="sep"></div>'+html;
+  el.innerHTML = '<div class="sep"></div>'+html;
+}
+
+function renderComments(){
+  var gid = document.getElementById('sel-grupo-comments').value;
+  if(!gid){document.getElementById('comments-content').innerHTML='';return;}
+  var resps = respuestas.filter(function(r){return r.grupo===gid;});
+  var el = document.getElementById('comments-content');
+  if(!resps.length){el.innerHTML='<p style="font-size:13px;color:var(--text2);margin-top:1rem">Sin respuestas.</p>';return;}
+  var html='';
+  resps.forEach(function(r){
+    var tieneComentarios = Object.keys(r.textosCompaneros||{}).length>0 || r.textoGeneral;
+    if(!tieneComentarios) return;
+    html += '<div style="margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:0.5px solid var(--border)">';
+    html += '<p style="font-size:12px;color:var(--text3);margin-bottom:0.75rem">Evaluador: '+escHtml(r.evaluador)+'</p>';
+    if(r.textosCompaneros){
+      Object.keys(r.textosCompaneros).forEach(function(alumno){
+        html += '<p style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:2px">Sobre '+escHtml(alumno)+':</p>';
+        html += '<p style="font-size:13px;margin-bottom:0.75rem">'+escHtml(r.textosCompaneros[alumno])+'</p>';
+      });
+    }
+    if(r.textoGeneral){
+      html += '<p style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:2px">Valoración general del proyecto:</p>';
+      html += '<p style="font-size:13px;">'+escHtml(r.textoGeneral)+'</p>';
+    }
+    html += '</div>';
+  });
+  el.innerHTML = html || '<p style="font-size:13px;color:var(--text2);margin-top:1rem">No hay comentarios cualitativos en este grupo.</p>';
 }
 
 function exportCSV(){
-  var gid=document.getElementById('sel-grupo-results').value;
+  var gid = document.getElementById('sel-grupo-results').value;
   if(!gid){alert('Selecciona un grupo primero.');return;}
-  var g=grupos.find(function(x){return x.id===gid;});
-  var resps=respuestas.filter(function(r){return r.grupo===gid;});
+  var g     = grupos.find(function(x){return x.id===gid;});
+  var resps = respuestas.filter(function(r){return r.grupo===gid;});
   if(!resps.length){alert('No hay respuestas para exportar.');return;}
-  var csv='\uFEFF'+'Timestamp,Evaluador,Grupo,Evaluado,Item,Puntuacion\n';
+  var csv = '\uFEFF'+'Timestamp,Evaluador,Grupo,Evaluado,Item,Puntuacion,ComentarioCompanero,ComentarioGeneral\n';
   resps.forEach(function(r){
     r.rows.forEach(function(row){
-      csv+='"'+r.ts+'","'+r.evaluador+'","'+r.grupoNombre+'","'+row.evaluado+'","'+row.item.replace(/"/g,'""')+'","'+row.puntuacion+'"\n';
+      var cc = (r.textosCompaneros&&r.textosCompaneros[row.evaluado])?r.textosCompaneros[row.evaluado].replace(/"/g,'""'):'';
+      var cg = r.textoGeneral?r.textoGeneral.replace(/"/g,'""'):'';
+      csv += '"'+r.ts+'","'+r.evaluador+'","'+r.grupoNombre+'","'+row.evaluado+'","'+row.item.replace(/"/g,'""')+'","'+row.puntuacion+'","'+cc+'","'+cg+'"\n';
     });
   });
-  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  var a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='coevaluacion_'+g.nombre.replace(/\s/g,'_')+'.csv';
+  var blob = new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'coevaluacion_'+g.nombre.replace(/\s/g,'_')+'.csv';
   a.click();
 }
 
 function saveWebhook(){
-  webhookUrl=document.getElementById('webhook-url').value.trim();
+  webhookUrl = document.getElementById('webhook-url').value.trim();
   save();
-  document.getElementById('webhook-msg').innerHTML='<div class="msg ok" style="margin-top:8px">URL guardada correctamente.</div>';
+  document.getElementById('webhook-msg').innerHTML='<div class="msg ok" style="margin-top:8px">URL guardada.</div>';
   setTimeout(function(){document.getElementById('webhook-msg').innerHTML='';},2500);
 }
 
 function testWebhook(){
-  var url=document.getElementById('webhook-url').value.trim();
+  var url = document.getElementById('webhook-url').value.trim();
   if(!url){document.getElementById('webhook-msg').innerHTML='<div class="msg err" style="margin-top:8px">Introduce una URL primero.</div>';return;}
-  document.getElementById('webhook-msg').innerHTML='<div class="msg info" style="margin-top:8px">Probando conexión...</div>';
+  document.getElementById('webhook-msg').innerHTML='<div class="msg info" style="margin-top:8px">Probando...</div>';
   fetch(url,{method:'POST',body:JSON.stringify({test:true,evaluador:'test',grupo:'test',rows:[]})})
     .then(function(r){return r.json();})
-    .then(function(d){document.getElementById('webhook-msg').innerHTML='<div class="msg ok" style="margin-top:8px">Conexión correcta.</div>';})
-    .catch(function(e){document.getElementById('webhook-msg').innerHTML='<div class="msg err" style="margin-top:8px">Error de conexión. Revisa la URL y el despliegue del Apps Script.</div>';});
+    .then(function(){document.getElementById('webhook-msg').innerHTML='<div class="msg ok" style="margin-top:8px">Conexión correcta.</div>';})
+    .catch(function(){document.getElementById('webhook-msg').innerHTML='<div class="msg err" style="margin-top:8px">Error de conexión.</div>';});
 }
 
-function copyScript(){
-  navigator.clipboard.writeText(APPS_SCRIPT).then(function(){alert('Código copiado al portapapeles.');});
-}
-
-renderHome();
+// Arranque
+cargarGruposEnHome();
 </script>
 </body>
 </html>
