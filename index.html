@@ -435,13 +435,39 @@ function iniciarEval(){
   if(!gid||!self){alert('Selecciona tu grupo y tu nombre.');return;}
   currentGrupo = grupos.find(function(x){return x.id===gid;});
   currentSelf  = self;
-  if(yaEvaluo(gid,self)){alert('Ya has enviado tu evaluación. Gracias.');return;}
-  ratings = {};
-  document.getElementById('instr-sub').textContent = currentGrupo.nombre + ' · ' + self;
-  showScreen('s-instrucciones');
+
+  // Comprobación local rápida
+  if(yaEvaluoLocal(gid,self)){alert('Ya has enviado tu evaluación. Gracias.');return;}
+
+  // Comprobación en Google Sheets (evita duplicados desde otros dispositivos)
+  var url = (webhookUrl || WEBHOOK_URL_DEFAULT)
+    + '?action=check&evaluador=' + encodeURIComponent(self)
+    + '&grupo=' + encodeURIComponent(currentGrupo.nombre);
+
+  document.getElementById('home-err').innerHTML = '<div class="msg info" style="margin-top:8px"><i class="ti ti-loader"></i> Verificando...</div>';
+
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      document.getElementById('home-err').innerHTML = '';
+      if(data.yaEvaluo){
+        alert('Ya has enviado tu evaluación desde otro dispositivo. Gracias.');
+        return;
+      }
+      ratings = {};
+      document.getElementById('instr-sub').textContent = currentGrupo.nombre + ' · ' + self;
+      showScreen('s-instrucciones');
+    })
+    .catch(function(){
+      // Sin conexión: permitir continuar con comprobación local
+      document.getElementById('home-err').innerHTML = '';
+      ratings = {};
+      document.getElementById('instr-sub').textContent = currentGrupo.nombre + ' · ' + self;
+      showScreen('s-instrucciones');
+    });
 }
 
-function yaEvaluo(gid,self){
+function yaEvaluoLocal(gid,self){
   return respuestas.some(function(r){return r.grupo===gid&&r.evaluador===self;});
 }
 
