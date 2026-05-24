@@ -832,131 +832,18 @@ function testWebhook(){
     .catch(function(){document.getElementById('webhook-msg').innerHTML='<div class="msg err" style="margin-top:8px">Error de conexión.</div>';});
 }
 
-// ── INFORME ──────────────────────────────────────────────────────────────
+// -- INFORME --
 function primer_apellido(nombre) {
-  var partes = nombre.trim().split(/\s+/);
-  var nombresDobles = ['María','Jesús','Héctor','José','Lucas','Tao','Andrés',
-    'Carlos','Hugo','Javier','Jaime','Carolina','Pablo','Cristina','Vicente',
-    'Antonio','Chakib','María'];
-  if (partes.length >= 3 && nombresDobles.indexOf(partes[0]) >= 0) {
-    return partes.length === 4 ? partes[2].toLowerCase() : partes[1].toLowerCase();
+  var partes = nombre.trim().split(' ');
+  var dobles = ['Maria','Jesus','Hector','Jose','Lucas','Tao','Andres','Carlos',
+    'Hugo','Javier','Jaime','Carolina','Pablo','Cristina','Vicente','Antonio','Chakib'];
+  if (partes.length >= 3 && dobles.indexOf(partes[0]) >= 0) {
+    return (partes.length === 4 ? partes[2] : partes[1]).toLowerCase();
   }
-  return partes.length >= 2 ? partes[1].toLowerCase() : partes[0].toLowerCase();
+  return (partes.length >= 2 ? partes[1] : partes[0]).toLowerCase();
 }
 
-var ITEMS_INFORME = null;
-
-function generarInforme() {
-  var el = document.getElementById('informe-content');
-  if (!respuestas.length) {
-    el.innerHTML = '<div class="msg info">No hay respuestas registradas aún.</div>';
-    return;
-  }
-
-  // Calcular medias por grupo/alumno/item
-  var datos = {}; // datos[grupo][alumno][item] = [vals]
-  respuestas.forEach(function(r) {
-    if (!datos[r.grupoNombre]) datos[r.grupoNombre] = {};
-    r.rows.forEach(function(row) {
-      if (row.puntuacion === 'NP' || row.puntuacion === null) return;
-      if (!datos[r.grupoNombre][row.evaluado]) datos[r.grupoNombre][row.evaluado] = {};
-      if (!datos[r.grupoNombre][row.evaluado][row.item]) datos[r.grupoNombre][row.evaluado][row.item] = [];
-      datos[r.grupoNombre][row.evaluado][row.item].push(Number(row.puntuacion));
-    });
-  });
-
-  // Alumnos con su grupo, ordenados por primer apellido
-  var alumnosList = [];
-  grupos.forEach(function(g) {
-    g.alumnos.forEach(function(alumno) {
-      var evaluadoresGrupo = respuestas.filter(function(r){return r.grupoNombre===g.nombre;}).map(function(r){return r.evaluador;});
-      var total = g.alumnos.length;
-      var respondieron = evaluadoresGrupo.length;
-      alumnosList.push({alumno:alumno, grupo:g, respondieron:respondieron, total:total});
-    });
-  });
-  alumnosList.sort(function(a,b){ return primer_apellido(a.alumno).localeCompare(primer_apellido(b.alumno),'es'); });
-
-  // Verificar grupos incompletos
-  var gruposIncompletos = {};
-  grupos.forEach(function(g) {
-    var resp = respuestas.filter(function(r){return r.grupoNombre===g.nombre;}).map(function(r){return r.evaluador;});
-    if (resp.length < g.alumnos.length) {
-      gruposIncompletos[g.nombre] = {respondieron: resp.length, total: g.alumnos.length, pendientes: g.alumnos.filter(function(a){return resp.indexOf(a)<0;})};
-    }
-  });
-
-  // Aviso general si hay grupos incompletos
-  var avisoHtml = '';
-  if (Object.keys(gruposIncompletos).length > 0) {
-    avisoHtml = '<div class="msg warn" style="margin-bottom:1rem"><i class="ti ti-alert-triangle"></i> <strong>Participación incompleta.</strong> Los siguientes grupos aún no han respondido todos sus miembros — las notas pueden variar:<ul style="margin-top:6px;padding-left:1.2rem;font-size:13px">';
-    Object.keys(gruposIncompletos).forEach(function(gn) {
-      var info = gruposIncompletos[gn];
-      avisoHtml += '<li><strong>'+escHtml(gn)+'</strong> ('+info.respondieron+'/'+info.total+'): pendientes — '+info.pendientes.map(escHtml).join(', ')+'</li>';
-    });
-    avisoHtml += '</ul></div>';
-  }
-
-  // Cabecera tabla
-  var html = avisoHtml;
-  html += '<div style="overflow-x:auto"><table id="tabla-informe">';
-  html += '<thead><tr>';
-  html += '<th style="min-width:180px">Alumno</th>';
-  html += '<th style="min-width:160px">Grupo</th>';
-  items.forEach(function(item, ii) {
-    html += '<th style="min-width:70px;text-align:center" title="'+escHtml(item)+'">Ítem '+(ii+1)+'</th>';
-  });
-  html += '<th style="min-width:80px;text-align:center">Nota final</th>';
-  html += '<th style="min-width:90px;text-align:center">Participación</th>';
-  html += '</tr></thead><tbody>';
-
-  alumnosList.forEach(function(entry, idx) {
-    var alumno = entry.alumno;
-    var g = entry.grupo;
-    var gNombre = g.nombre;
-    var incompleto = !!gruposIncompletos[gNombre];
-    var bg = idx%2===0 ? 'background:var(--gray)' : '';
-    var rowStyle = bg + (incompleto ? ';border-left:3px solid #E8A020' : '');
-    html += '<tr style="'+rowStyle+'">';
-    html += '<td style="font-size:13px;padding:8px 10px">'+escHtml(alumno)+'</td>';
-    html += '<td style="font-size:12px;color:var(--text2);padding:8px 10px">'+escHtml(gNombre)+'</td>';
-
-    var medias = [];
-    items.forEach(function(item) {
-      var vals = (datos[gNombre]&&datos[gNombre][alumno]&&datos[gNombre][alumno][item]) ? datos[gNombre][alumno][item] : [];
-      var media = vals.length ? vals.reduce(function(a,b){return a+b;},0)/vals.length : null;
-      medias.push(media);
-      html += '<td style="text-align:center;font-size:13px;padding:8px 6px">'+(media!==null?media.toFixed(2):'—')+'</td>';
-    });
-
-    var validas = medias.filter(function(m){return m!==null;});
-    var notaFinal = validas.length ? validas.reduce(function(a,b){return a+b;},0)/validas.length : null;
-    html += '<td style="text-align:center;font-weight:600;font-size:14px;color:var(--blue);padding:8px 6px">'+(notaFinal!==null?notaFinal.toFixed(2):'—')+'</td>';
-
-    var participacion = entry.respondieron+'/'+entry.total;
-    var partColor = incompleto ? '#E8A020' : 'var(--green-dark)';
-    var partIcon = incompleto ? '<i class="ti ti-clock" style="font-size:12px"></i> ' : '<i class="ti ti-check" style="font-size:12px"></i> ';
-    html += '<td style="text-align:center;font-size:12px;color:'+partColor+';padding:8px 6px">'+partIcon+participacion+'</td>';
-    html += '</tr>';
-  });
-
-  html += '</tbody></table></div>';
-
-  // Leyenda ítems
-  html += '<div style="margin-top:1rem;padding:0.75rem;background:var(--gray);border-radius:var(--radius-sm)">';
-  html += '<p style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:4px">Leyenda de ítems:</p>';
-  items.forEach(function(item, ii) {
-    html += '<p style="font-size:11px;color:var(--text3);line-height:1.6"><strong>Ítem '+(ii+1)+':</strong> '+escHtml(item)+'</p>';
-  });
-  html += '</div>';
-
-  el.innerHTML = html;
-  ITEMS_INFORME = items.slice();
-}
-
-function exportarInformeCSV() {
-  if (!respuestas.length) { alert('No hay datos para exportar.'); return; }
-
+function calcularDatos() {
   var datos = {};
   respuestas.forEach(function(r) {
     if (!datos[r.grupoNombre]) datos[r.grupoNombre] = {};
@@ -967,39 +854,110 @@ function exportarInformeCSV() {
       datos[r.grupoNombre][row.evaluado][row.item].push(Number(row.puntuacion));
     });
   });
+  return datos;
+}
 
-  var alumnosList = [];
+function alumnosOrdenados() {
+  var lista = [];
   grupos.forEach(function(g) {
     var resp = respuestas.filter(function(r){return r.grupoNombre===g.nombre;}).map(function(r){return r.evaluador;});
     g.alumnos.forEach(function(alumno) {
-      alumnosList.push({alumno:alumno, grupo:g, respondieron:resp.length, total:g.alumnos.length});
+      lista.push({alumno:alumno, grupo:g, respondieron:resp.length, total:g.alumnos.length});
     });
   });
-  alumnosList.sort(function(a,b){ return primer_apellido(a.alumno).localeCompare(primer_apellido(b.alumno),'es'); });
+  lista.sort(function(a,b){ return primer_apellido(a.alumno).localeCompare(primer_apellido(b.alumno),'es'); });
+  return lista;
+}
 
-  var cabItems = items.map(function(item,ii){ return '"Ítem '+(ii+1)+'"'; }).join(',');
-  var csv = '﻿'+'Alumno,Grupo,'+cabItems+',Nota final,Participación,Estado
-';
+function gruposIncompletosInfo() {
+  var inc = {};
+  grupos.forEach(function(g) {
+    var resp = respuestas.filter(function(r){return r.grupoNombre===g.nombre;}).map(function(r){return r.evaluador;});
+    if (resp.length < g.alumnos.length) {
+      inc[g.nombre] = {
+        respondieron: resp.length,
+        total: g.alumnos.length,
+        pendientes: g.alumnos.filter(function(a){return resp.indexOf(a)<0;})
+      };
+    }
+  });
+  return inc;
+}
 
-  alumnosList.forEach(function(entry) {
+function generarInforme() {
+  var el = document.getElementById('informe-content');
+  if (!respuestas.length) { el.innerHTML = '<div class="msg info">No hay respuestas registradas aun.</div>'; return; }
+  var datos = calcularDatos();
+  var lista = alumnosOrdenados();
+  var inc = gruposIncompletosInfo();
+  var html = '';
+  if (Object.keys(inc).length > 0) {
+    html += '<div class="msg warn" style="margin-bottom:1rem"><i class="ti ti-alert-triangle"></i> ';
+    html += '<strong>Participacion incompleta.</strong> Las notas pueden variar:<ul style="margin-top:6px;padding-left:1.2rem;font-size:13px">';
+    Object.keys(inc).forEach(function(gn) {
+      var info = inc[gn];
+      html += '<li><strong>'+escHtml(gn)+'</strong> ('+info.respondieron+'/'+info.total+') pendientes: '+info.pendientes.map(escHtml).join(', ')+'</li>';
+    });
+    html += '</ul></div>';
+  }
+  html += '<div style="overflow-x:auto"><table>';
+  html += '<thead><tr><th style="min-width:180px;text-align:left">Alumno</th><th style="min-width:150px;text-align:left">Grupo</th>';
+  items.forEach(function(item,ii){ html += '<th style="min-width:68px;text-align:center" title="'+escHtml(item)+'">Item '+(ii+1)+'</th>'; });
+  html += '<th style="min-width:80px;text-align:center">Nota final</th><th style="min-width:90px;text-align:center">Participacion</th></tr></thead><tbody>';
+  lista.forEach(function(entry,idx) {
+    var alumno = entry.alumno;
+    var gNombre = entry.grupo.nombre;
+    var incompleto = !!inc[gNombre];
+    var bg = idx%2===0 ? 'background:var(--gray);' : '';
+    var borde = incompleto ? 'border-left:3px solid #E8A020;' : '';
+    html += '<tr style="'+bg+borde+'"><td style="font-size:13px;padding:8px 10px">'+escHtml(alumno)+'</td>';
+    html += '<td style="font-size:12px;color:var(--text2);padding:8px 10px">'+escHtml(gNombre)+'</td>';
+    var medias = [];
+    items.forEach(function(item) {
+      var vals = (datos[gNombre]&&datos[gNombre][alumno]&&datos[gNombre][alumno][item])?datos[gNombre][alumno][item]:[];
+      var m = vals.length ? vals.reduce(function(a,b){return a+b;},0)/vals.length : null;
+      medias.push(m);
+      html += '<td style="text-align:center;font-size:13px;padding:8px 6px">'+(m!==null?m.toFixed(2):'--')+'</td>';
+    });
+    var validas = medias.filter(function(m){return m!==null;});
+    var nf = validas.length ? validas.reduce(function(a,b){return a+b;},0)/validas.length : null;
+    html += '<td style="text-align:center;font-weight:600;font-size:14px;color:var(--blue);padding:8px 6px">'+(nf!==null?nf.toFixed(2):'--')+'</td>';
+    var pc = incompleto ? '#E8A020' : 'var(--green-dark)';
+    var pi = incompleto ? '<i class="ti ti-clock" style="font-size:12px"></i> ' : '<i class="ti ti-check" style="font-size:12px"></i> ';
+    html += '<td style="text-align:center;font-size:12px;color:'+pc+';padding:8px 6px">'+pi+entry.respondieron+'/'+entry.total+'</td></tr>';
+  });
+  html += '</tbody></table></div>';
+  html += '<div style="margin-top:1rem;padding:0.75rem;background:var(--gray);border-radius:var(--radius-sm)">';
+  html += '<p style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:4px">Leyenda:</p>';
+  items.forEach(function(item,ii){ html += '<p style="font-size:11px;color:var(--text3);line-height:1.6"><strong>Item '+(ii+1)+':</strong> '+escHtml(item)+'</p>'; });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function exportarInformeCSV() {
+  if (!respuestas.length) { alert('No hay datos para exportar.'); return; }
+  var datos = calcularDatos();
+  var lista = alumnosOrdenados();
+  var cabItems = items.map(function(item,ii){ return 'Item '+(ii+1); }).join(',');
+  var lineas = ['Alumno,Grupo,'+cabItems+',Nota final,Participacion,Estado'];
+  lista.forEach(function(entry) {
     var alumno = entry.alumno;
     var gNombre = entry.grupo.nombre;
     var medias = items.map(function(item) {
-      var vals = (datos[gNombre]&&datos[gNombre][alumno]&&datos[gNombre][alumno][item]) ? datos[gNombre][alumno][item] : [];
+      var vals = (datos[gNombre]&&datos[gNombre][alumno]&&datos[gNombre][alumno][item])?datos[gNombre][alumno][item]:[];
       return vals.length ? vals.reduce(function(a,b){return a+b;},0)/vals.length : null;
     });
     var validas = medias.filter(function(m){return m!==null;});
-    var notaFinal = validas.length ? validas.reduce(function(a,b){return a+b;},0)/validas.length : null;
+    var nf = validas.length ? validas.reduce(function(a,b){return a+b;},0)/validas.length : null;
     var estado = entry.respondieron < entry.total ? 'INCOMPLETO' : 'COMPLETO';
-    var participacion = entry.respondieron+'/'+entry.total;
-    csv += '"'+alumno+'","'+gNombre+'",';
-    csv += medias.map(function(m){return m!==null?m.toFixed(2):'';}).join(',')+',';
-    csv += (notaFinal!==null?notaFinal.toFixed(2):'')+',';
-    csv += participacion+','+estado+'
-';
+    var fila = ['"'+alumno+'"','"'+gNombre+'"'];
+    medias.forEach(function(m){ fila.push(m!==null?m.toFixed(2):''); });
+    fila.push(nf!==null?nf.toFixed(2):'');
+    fila.push(entry.respondieron+'/'+entry.total);
+    fila.push(estado);
+    lineas.push(fila.join(','));
   });
-
-  var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  var blob = new Blob([lineas.join('\n')], {type:'text/csv;charset=utf-8;'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'informe_coevaluacion.csv';
