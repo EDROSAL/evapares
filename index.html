@@ -323,9 +323,11 @@ pre{background:var(--gray);padding:1rem;border-radius:var(--radius-sm);font-size
       <h2>Informe de coevaluación</h2>
       <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Muestra las notas medias por alumno e ítem, calculadas a partir de las respuestas recibidas. Los grupos con participación incompleta se marcan con aviso.</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem">
+        <button onclick="cargarRespuestasSheets()"><i class="ti ti-refresh"></i> Cargar respuestas desde Sheets</button>
         <button class="primary" onclick="generarInforme()"><i class="ti ti-chart-bar"></i> Generar informe</button>
         <button onclick="exportarInformeCSV()"><i class="ti ti-download"></i> Exportar CSV</button>
       </div>
+      <div id="informe-status"></div>
       <div id="informe-content"></div>
     </div>
   </div>
@@ -882,6 +884,27 @@ function gruposIncompletosInfo() {
     }
   });
   return inc;
+}
+
+function cargarRespuestasSheets() {
+  var el = document.getElementById('informe-status');
+  el.innerHTML = '<div class="msg info"><i class="ti ti-loader"></i> Cargando respuestas desde Google Sheets...</div>';
+  var url = (webhookUrl || WEBHOOK_URL_DEFAULT) + '?action=respuestas';
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if (data.ok && data.respuestas) {
+        respuestas = data.respuestas;
+        save();
+        el.innerHTML = '<div class="msg ok"><i class="ti ti-check"></i> ' + data.respuestas.length + ' evaluaciones cargadas desde Sheets.</div>';
+        setTimeout(function(){el.innerHTML='';}, 3000);
+      } else {
+        el.innerHTML = '<div class="msg err">Error al cargar las respuestas.</div>';
+      }
+    })
+    .catch(function(){
+      el.innerHTML = '<div class="msg err">No se pudo conectar con Google Sheets.</div>';
+    });
 }
 
 function generarInforme() {
