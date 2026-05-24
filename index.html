@@ -279,11 +279,7 @@ pre{background:var(--gray);padding:1rem;border-radius:var(--radius-sm);font-size
 
     <div class="card">
       <h2>Contraseña de administración</h2>
-      <div style="display:flex;gap:8px">
-        <input type="password" id="new-pw" placeholder="Nueva contraseña" style="margin:0;flex:1">
-        <button onclick="cambiarPw()">Cambiar</button>
-      </div>
-      <div id="pw-msg"></div>
+      <p style="font-size:13px;color:var(--text2)">La contraseña está fijada en el código fuente como hash SHA-256. Para cambiarla, genera el nuevo hash y actualiza el <code>index.html</code> en GitHub.</p>
     </div>
 
     <div class="card">
@@ -378,7 +374,7 @@ function lss(k,v){localStorage.setItem(k,JSON.stringify(v));}
 var grupos     = ls('coe_grupos', []);
 var items      = ls('coe_items', ITEMS_DEFAULT);
 var respuestas = ls('coe_respuestas', []);
-var adminPw    = ls('coe_pw', 'admin123');
+var ADMIN_HASH = '1532c4fe9223767b9cdee9cb5e9495b900616987d23bba1405aae3623262789a'; // SHA-256 de la contraseña
 var webhookUrl = ls('coe_webhook', WEBHOOK_URL_DEFAULT);
 var currentGrupo = null;
 var currentSelf  = null;
@@ -388,7 +384,6 @@ function save(){
   lss('coe_grupos', grupos);
   lss('coe_items', items);
   lss('coe_respuestas', respuestas);
-  lss('coe_pw', adminPw);
   lss('coe_webhook', webhookUrl);
 }
 
@@ -629,14 +624,17 @@ function enviarEval(){
 // ── ADMIN ─────────────────────────────────────────────────────────────────
 function loginAdmin(){
   var pw = document.getElementById('admin-pw').value;
-  if(pw === adminPw){
-    document.getElementById('admin-pw').value = '';
-    document.getElementById('login-err').innerHTML = '';
-    renderAdmin();
-    showScreen('s-admin');
-  } else {
-    document.getElementById('login-err').innerHTML = '<div class="msg err">Contraseña incorrecta.</div>';
-  }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(function(buf){
+    var hash = Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+    if(hash === ADMIN_HASH){
+      document.getElementById('admin-pw').value = '';
+      document.getElementById('login-err').innerHTML = '';
+      renderAdmin();
+      showScreen('s-admin');
+    } else {
+      document.getElementById('login-err').innerHTML = '<div class="msg err">Contraseña incorrecta.</div>';
+    }
+  });
 }
 
 function renderAdmin(){
@@ -724,14 +722,7 @@ function delItem(ii){
   items.splice(ii,1); save(); renderItemsList();
 }
 
-function cambiarPw(){
-  var v = document.getElementById('new-pw').value.trim();
-  if(!v) return;
-  adminPw = v; save();
-  document.getElementById('new-pw').value = '';
-  document.getElementById('pw-msg').innerHTML = '<div class="msg ok" style="margin-top:8px">Contraseña actualizada.</div>';
-  setTimeout(function(){document.getElementById('pw-msg').innerHTML='';}, 2500);
-}
+
 
 function borrarRespuestas(){
   if(!confirm('¿Borrar todas las respuestas locales? Los datos en Google Sheets no se borran.')) return;
