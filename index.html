@@ -888,23 +888,35 @@ function gruposIncompletosInfo() {
 
 function cargarRespuestasSheets() {
   var el = document.getElementById('informe-status');
-  el.innerHTML = '<div class="msg info"><i class="ti ti-loader"></i> Cargando respuestas desde Google Sheets...</div>';
-  var url = (webhookUrl || WEBHOOK_URL_DEFAULT) + '?action=respuestas';
-  fetch(url)
-    .then(function(r){return r.json();})
-    .then(function(data){
-      if (data.ok && data.respuestas) {
-        respuestas = data.respuestas;
-        save();
-        el.innerHTML = '<div class="msg ok"><i class="ti ti-check"></i> ' + data.respuestas.length + ' evaluaciones cargadas desde Sheets.</div>';
-        setTimeout(function(){el.innerHTML='';}, 3000);
-      } else {
-        el.innerHTML = '<div class="msg err">Error al cargar las respuestas.</div>';
-      }
-    })
-    .catch(function(){
-      el.innerHTML = '<div class="msg err">No se pudo conectar con Google Sheets.</div>';
-    });
+  var url = webhookUrl || WEBHOOK_URL_DEFAULT;
+  el.innerHTML = '<div class="msg info"><i class="ti ti-loader"></i> Cargando datos desde Google Sheets...</div>';
+
+  // Cargar grupos y respuestas en paralelo
+  Promise.all([
+    fetch(url).then(function(r){return r.json();}),
+    fetch(url+'?action=respuestas').then(function(r){return r.json();})
+  ])
+  .then(function(results) {
+    var dataGrupos = results[0];
+    var dataResp   = results[1];
+    var msgs = [];
+    if (dataGrupos.ok && dataGrupos.grupos) {
+      grupos = dataGrupos.grupos;
+      lss('coe_grupos', grupos);
+      msgs.push(dataGrupos.grupos.length + ' grupos');
+    }
+    if (dataResp.ok && dataResp.respuestas) {
+      respuestas = dataResp.respuestas;
+      lss('coe_respuestas', respuestas);
+      msgs.push(dataResp.respuestas.length + ' evaluaciones');
+    }
+    save();
+    el.innerHTML = '<div class="msg ok"><i class="ti ti-check"></i> Cargado: ' + msgs.join(', ') + '.</div>';
+    setTimeout(function(){el.innerHTML='';}, 3000);
+  })
+  .catch(function(){
+    el.innerHTML = '<div class="msg err">No se pudo conectar con Google Sheets.</div>';
+  });
 }
 
 function generarInforme() {
