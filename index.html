@@ -251,7 +251,6 @@ pre{background:var(--gray);padding:1rem;border-radius:var(--radius-sm);font-size
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem">
     <button class="tab-btn active" id="btn-config" onclick="showTab('tab-config')">Configuración</button>
     <button class="tab-btn" id="btn-results" onclick="showTab('tab-results')">Resultados</button>
-    <button class="tab-btn" id="btn-informe" onclick="showTab('tab-informe')">Informe</button>
     <button class="tab-btn" id="btn-sheets" onclick="showTab('tab-sheets')">Google Sheets</button>
   </div>
 
@@ -296,17 +295,36 @@ pre{background:var(--gray);padding:1rem;border-radius:var(--radius-sm);font-size
 
   <!-- TAB RESULTADOS -->
   <div id="tab-results" style="display:none">
+
     <div class="card">
-      <h2>Resultados por grupo</h2>
+      <h2>Sincronización con Google Sheets</h2>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:0.75rem">Carga los grupos y todas las respuestas desde Sheets antes de consultar los resultados.</p>
+      <button onclick="cargarRespuestasSheets()"><i class="ti ti-refresh"></i> Cargar respuestas desde Sheets</button>
+      <div id="informe-status" style="margin-top:0.75rem"></div>
+    </div>
+
+    <div class="card">
+      <h2>Informe completo</h2>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:0.75rem">Todos los alumnos ordenados por apellido con sus notas medias por ítem.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem">
+        <button class="primary" onclick="generarInforme()"><i class="ti ti-chart-bar"></i> Generar informe</button>
+        <button onclick="exportarInformeCSV()"><i class="ti ti-download"></i> Exportar CSV completo</button>
+      </div>
+      <div id="informe-content"></div>
+    </div>
+
+    <div class="card">
+      <h2>Detalle por grupo</h2>
       <label>Grupo</label>
       <select id="sel-grupo-results" onchange="renderResults()">
         <option value="">— Selecciona un grupo —</option>
       </select>
       <div id="results-content"></div>
       <div class="btn-row" style="margin-top:1rem">
-        <button onclick="exportCSV()"><i class="ti ti-download"></i> Exportar CSV (Excel)</button>
+        <button onclick="exportCSV()"><i class="ti ti-download"></i> Exportar CSV del grupo</button>
       </div>
     </div>
+
     <div class="card">
       <h2>Comentarios cualitativos</h2>
       <label>Grupo</label>
@@ -315,21 +333,7 @@ pre{background:var(--gray);padding:1rem;border-radius:var(--radius-sm);font-size
       </select>
       <div id="comments-content"></div>
     </div>
-  </div>
 
-  <!-- TAB INFORME -->
-  <div id="tab-informe" style="display:none">
-    <div class="card">
-      <h2>Informe de coevaluación</h2>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Muestra las notas medias por alumno e ítem, calculadas a partir de las respuestas recibidas. Los grupos con participación incompleta se marcan con aviso.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem">
-        <button onclick="cargarRespuestasSheets()"><i class="ti ti-refresh"></i> Cargar respuestas desde Sheets</button>
-        <button class="primary" onclick="generarInforme()"><i class="ti ti-chart-bar"></i> Generar informe</button>
-        <button onclick="exportarInformeCSV()"><i class="ti ti-download"></i> Exportar CSV</button>
-      </div>
-      <div id="informe-status"></div>
-      <div id="informe-content"></div>
-    </div>
   </div>
 
   <!-- TAB GOOGLE SHEETS -->
@@ -649,10 +653,10 @@ function renderAdmin(){
 }
 
 function showTab(tab){
-  ['tab-config','tab-results','tab-informe','tab-sheets'].forEach(function(t){
+  ['tab-config','tab-results','tab-sheets'].forEach(function(t){
     document.getElementById(t).style.display = t===tab?'block':'none';
   });
-  ['btn-config','btn-results','btn-informe','btn-sheets'].forEach(function(b){
+  ['btn-config','btn-results','btn-sheets'].forEach(function(b){
     var t = b.replace('btn-','tab-');
     document.getElementById(b).className = 'tab-btn'+(t===tab?' active':'');
   });
